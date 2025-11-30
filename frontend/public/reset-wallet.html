@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Wallet - Baifrost</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background: rgba(30, 30, 30, 0.8);
+      border: 2px solid rgba(64, 224, 208, 0.3);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #40E0D0;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+    .warning {
+      background: rgba(239, 68, 68, 0.1);
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    .warning h2 {
+      color: #ef4444;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    .warning ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .warning li {
+      margin: 8px 0;
+      color: #fca5a5;
+    }
+    .warning li:before {
+      content: "⚠️ ";
+      margin-right: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 16px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      border: 2px solid rgba(239, 68, 68, 0.5);
+      color: #ef4444;
+    }
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: #ef4444;
+      transform: scale(1.02);
+    }
+    .btn-success {
+      background: rgba(64, 224, 208, 0.2);
+      border: 2px solid rgba(64, 224, 208, 0.5);
+      color: #40E0D0;
+    }
+    .btn-success:hover {
+      background: rgba(64, 224, 208, 0.3);
+      border-color: #40E0D0;
+      transform: scale(1.02);
+    }
+    .status {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .status.success {
+      background: rgba(64, 224, 208, 0.1);
+      border: 1px solid rgba(64, 224, 208, 0.3);
+      color: #40E0D0;
+    }
+    .status.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🗑️ Reset Wallet</h1>
+    <p style="color: #999; margin-bottom: 20px;">
+      This tool will completely delete your wallet data
+    </p>
+
+    <div class="warning">
+      <h2>⚠️ WARNING</h2>
+      <ul>
+        <li>All wallet data will be permanently deleted</li>
+        <li>Seed phrase will be lost forever</li>
+        <li>PIN will be removed</li>
+        <li>This action CANNOT be undone!</li>
+      </ul>
+    </div>
+
+    <button class="btn-danger" onclick="resetWallet()">
+      🗑️ Delete Wallet & Reset
+    </button>
+
+    <button class="btn-success" onclick="window.location.href='/'">
+      ← Back to App
+    </button>
+
+    <div id="status"></div>
+  </div>
+
+  <script>
+    async function resetWallet() {
+      const confirmed = confirm(
+        '⚠️ FINAL WARNING!\n\n' +
+        'This will PERMANENTLY delete:\n' +
+        '• Your seed phrase\n' +
+        '• Your PIN\n' +
+        '• All wallet data\n\n' +
+        'Are you ABSOLUTELY SURE?'
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = '<div class="status">🔄 Resetting wallet...</div>';
+
+      try {
+        // Clear localStorage
+        localStorage.clear();
+        console.log('✅ localStorage cleared');
+
+        // Clear sessionStorage
+        sessionStorage.clear();
+        console.log('✅ sessionStorage cleared');
+
+        // Delete IndexedDB
+        return new Promise((resolve) => {
+          const deleteReq = indexedDB.deleteDatabase('WalletDB');
+          
+          deleteReq.onsuccess = () => {
+            console.log('✅ WalletDB deleted');
+            statusDiv.innerHTML = '<div class="status success">✅ Wallet reset successful! Redirecting...</div>';
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 1500);
+            resolve();
+          };
+
+          deleteReq.onerror = () => {
+            console.error('❌ Failed to delete WalletDB');
+            statusDiv.innerHTML = '<div class="status error">⚠️ IndexedDB delete failed, but clearing other data... Redirecting...</div>';
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 2000);
+            resolve();
+          };
+
+          deleteReq.onblocked = () => {
+            console.warn('⚠️ Delete blocked');
+            statusDiv.innerHTML = '<div class="status error">⚠️ Delete blocked. Please close other tabs and try again.</div>';
+          };
+        });
+
+      } catch (error) {
+        console.error('Reset error:', error);
+        statusDiv.innerHTML = '<div class="status error">❌ Error: ' + error.message + '</div>';
+      }
+    }
+  </script>
+</body>
+</html>
+
