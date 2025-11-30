@@ -86,6 +86,10 @@ export const AgentChatWidget: React.FC = () => {
   const handleToggle = () => {
     if (isOpen) {
       setIsOpen(false);
+      // Close session when closing widget
+      if (status === 'connected' || status === 'connecting') {
+        endSession();
+      }
     } else {
       setIsOpen(true);
       // Auto-start session if not connected
@@ -269,7 +273,7 @@ export const AgentChatWidget: React.FC = () => {
           }}
         />
 
-        {/* Icon with 3D effect */}
+        {/* Icon with 3D effect - Colorful Microphone */}
         <motion.div
           className="relative z-10 drop-shadow-lg"
           animate={isSpeaking && !isOpen ? {
@@ -284,7 +288,30 @@ export const AgentChatWidget: React.FC = () => {
           {isOpen ? (
             <X className="w-8 h-8 text-white" strokeWidth={2.5} />
           ) : (
-            <MessageCircle className="w-8 h-8 text-white" strokeWidth={2.5} />
+            <div className="relative">
+              {/* Gradient background layer for colorful effect */}
+              {status === 'connected' && (
+                <div 
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: 'linear-gradient(135deg, #60E8D8 0%, #FFA500 50%, #60E8D8 100%)',
+                    filter: 'blur(8px)',
+                    opacity: 0.6,
+                    transform: 'scale(1.2)',
+                  }}
+                />
+              )}
+              {/* Microphone icon */}
+              <Mic 
+                className={`w-8 h-8 relative z-10 ${status === 'connected' ? 'text-white' : 'text-gray-400'}`}
+                strokeWidth={2.5}
+                style={{
+                  filter: status === 'connected' 
+                    ? 'drop-shadow(0 0 12px rgba(96, 232, 216, 0.8)) drop-shadow(0 0 6px rgba(255, 165, 0, 0.6))'
+                    : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))',
+                }}
+              />
+            </div>
           )}
         </motion.div>
 
@@ -434,18 +461,16 @@ export const AgentChatWidget: React.FC = () => {
                     <Mic className="w-5 h-5 text-white" />
                   )}
                 </motion.button>
-                {/* Enhanced Disconnect button */}
-                {status === 'connected' && (
-                  <motion.button
-                    onClick={endSession}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="p-2.5 bg-white/20 hover:bg-white/30 rounded-xl transition-all backdrop-blur-sm border border-white/30 shadow-lg"
-                    title="Disconnect"
-                  >
-                    <X className="w-5 h-5 text-white" />
-                  </motion.button>
-                )}
+                {/* Enhanced Close button */}
+                <motion.button
+                  onClick={handleToggle}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="p-2.5 bg-white/20 hover:bg-white/30 rounded-xl transition-all backdrop-blur-sm border border-white/30 shadow-lg"
+                  title="Close chat"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </motion.button>
               </div>
             </div>
 
