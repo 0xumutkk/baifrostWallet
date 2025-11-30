@@ -1,473 +1,509 @@
-# WDK Wallet Foundation
+# 🌉 Baifrost - AI-Powered Crypto Wallet
 
-A minimal, production-ready self-custodial crypto wallet built with [Tether WDK](https://github.com/tetherto/wdk-core). This foundation provides core wallet functionality for Ethereum and Bitcoin, ready to be extended with UI, AI agents, or additional blockchain support.
+<div align="center">
 
-## 🎯 Project Goals
+![Baifrost Logo](https://img.shields.io/badge/Baifrost-Wallet-orange?style=for-the-badge)
+![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
-This is the **foundation layer** for building a fully-featured crypto wallet with:
-- ✅ Self-custodial seed phrase management
-- ✅ Multi-chain support (Ethereum + Bitcoin, easily extensible)
-- ✅ Account derivation (HD wallets)
-- ✅ Balance checking
-- ✅ Transaction preparation and sending
-- 🔜 UI integration (next phase)
-- 🔜 AI assistant features (next phase)
-- 🔜 Automated operations (next phase)
+**A next-generation, self-custodial crypto wallet with AI-powered voice assistant**
 
-## 📋 Features
+[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Security](#-security)
 
-### Current Features
+</div>
 
-- **Seed Phrase Management**: Generate or restore wallets from 12-word mnemonic phrases
-- **Multi-Chain Support**: 
-  - Ethereum (Sepolia testnet)
-  - Bitcoin (Testnet)
-- **HD Wallet Derivation**: Derive multiple accounts from a single seed
-- **Balance Checking**: Fetch real-time balances for all accounts
-- **Transaction Support**: Prepare and send transactions (with safety checks)
-- **Data Persistence**: Save wallet metadata (addresses, balances)
-- **Comprehensive Testing**: Full test suite included
+---
 
-### Architecture
+## ✨ Overview
+
+**Baifrost** is a cutting-edge Progressive Web App (PWA) that combines the power of [Tether's WDK](https://github.com/tetherto/wdk-core) with an intelligent AI voice assistant powered by ElevenLabs. Experience seamless crypto management through natural language commands, secure multi-chain transactions, and an intuitive interface.
+
+### 🎯 What Makes Baifrost Special?
+
+- 🤖 **AI Voice Assistant**: Interact with your wallet using natural language commands
+- 🔐 **Bank-Level Security**: IndexedDB + WebCrypto encryption with PIN protection
+- 🌐 **Multi-Chain Support**: Ethereum (Sepolia) and Bitcoin (Testnet) ready
+- 💱 **Built-in DEX**: Swap tokens directly within the wallet
+- 📱 **PWA Ready**: Install as a native app on any device
+- 🎨 **Beautiful UI**: Modern design with smooth animations
+
+---
+
+## 🚀 Features
+
+### Core Wallet Features
+
+- ✅ **Self-Custodial**: Your keys, your crypto. Full control over your assets
+- ✅ **HD Wallet**: Generate or import 12-word seed phrases
+- ✅ **Multi-Chain**: Support for Ethereum and Bitcoin (easily extensible)
+- ✅ **Transaction History**: Real-time transaction tracking with block explorer links
+- ✅ **Token Balances**: View native and ERC-20 token balances
+- ✅ **Contact Management**: Save and resolve addresses by name
+
+### AI Assistant Features
+
+- 🎤 **Voice Commands**: "Send 10 dollars to Ahmet" - it just works!
+- 💬 **Natural Language**: Chat with your wallet like a friend
+- 🔍 **Smart Resolution**: Automatically resolves contact names to addresses
+- ✅ **Transaction Approval**: Review and approve transactions before execution
+- 📊 **Balance Queries**: Ask about your portfolio anytime
+- 🔄 **Swap Preparation**: Prepare token swaps through conversation
+
+### Security Features
+
+- 🔐 **PIN Protection**: 6-digit PIN with auto-lock after 5 minutes
+- 🛡️ **WebCrypto Encryption**: AES-GCM 256-bit encryption for seed phrases
+- 🔑 **PBKDF2 Key Derivation**: 100,000 iterations for maximum security
+- 💾 **IndexedDB Storage**: Secure client-side database
+- 🚫 **No Server Storage**: Your seed phrase never leaves your device
+
+### UI/UX Features
+
+- 🎨 **Baifrost Theme**: Warm orange-teal gradient with modern aesthetics
+- ✨ **Smooth Animations**: Framer Motion powered transitions
+- 📱 **Responsive Design**: Works perfectly on mobile, tablet, and desktop
+- 🌙 **Dark Mode**: Eye-friendly dark theme
+- ⚡ **Fast Performance**: React Query for optimized data fetching
+- 🔄 **Real-time Updates**: Auto-refresh balances and transaction history
+
+---
+
+## 🏗️ Architecture
 
 ```
-wdk-wallet-foundation/
-├── WalletFoundation.js    # Core wallet class
-├── index.js               # Main demo/entry point
-├── init-wallet.js         # Wallet initialization script
-├── test-wallet.js         # Test suite
-├── package.json           # Dependencies and scripts
-└── README.md              # This file
+┌─────────────────────────────────────────────────────────────┐
+│                    Browser (PWA)                              │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │  React + Vite + TypeScript Frontend                │    │
+│  │  • Dashboard, Send, Swap, Receive Screens         │    │
+│  │  • AI Chat Widget (ElevenLabs)                    │    │
+│  │  • Contact Management                             │    │
+│  │  • IndexedDB + WebCrypto Storage                  │    │
+│  └────────────────┬───────────────────────────────────┘    │
+│                   │ fetch('/api/*')                         │
+└───────────────────┼─────────────────────────────────────────┘
+                    │
+                    ↓ HTTP + Session Cookies
+┌───────────────────┴─────────────────────────────────────────┐
+│              Node.js Backend API (Express)                   │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │  REST API Endpoints                                │    │
+│  │  • /api/wallet/*                                   │    │
+│  │  • /api/transaction/*                              │    │
+│  └────────────────┬───────────────────────────────────┘    │
+│                   │                                          │
+│  ┌────────────────▼───────────────────────────────────┐    │
+│  │  WalletFoundation.js (Tether WDK Wrapper)         │    │
+│  │  • Multi-chain account derivation                  │    │
+│  │  • Transaction preparation & signing                │    │
+│  │  • Balance fetching                                │    │
+│  └────────────────┬───────────────────────────────────┘    │
+│                   │                                          │
+└───────────────────┼──────────────────────────────────────────┘
+                    │
+                    ↓ @tetherto/wdk packages
+┌───────────────────┴─────────────────────────────────────────┐
+│              Tether WDK (Wallet Development Kit)             │
+│  • @tetherto/wdk (core)                                     │
+│  • @tetherto/wdk-wallet-evm (Ethereum)                      │
+│  • @tetherto/wdk-wallet-btc (Bitcoin)                      │
+│  • @tetherto/wdk-protocol-swap-velora-evm (DEX)             │
+└─────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+
+- **Node.js** 18+ (recommended: 20+)
+- **npm** or **yarn**
+- Modern browser with WebCrypto API support
+
+### Setup
+
+1. **Clone the repository**:
+```bash
+git clone https://github.com/0xumutkk/baifrostWallet.git
+cd baifrostWallet
+```
+
+2. **Install dependencies**:
+```bash
+# Install root dependencies (backend)
+npm install
+
+# Install frontend dependencies
+cd frontend
+npm install
+cd ..
+```
+
+3. **Configure environment** (optional):
+Create a `.env` file in the root directory:
+```env
+# Ethereum Configuration
+ETH_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
+ETH_CHAIN_ID=11155111
+
+# Bitcoin Configuration
+BTC_NETWORK=testnet
+BTC_RPC_URL=https://blockstream.info/testnet/api
+
+# ElevenLabs AI Agent (required for AI features)
+ELEVENLABS_AGENT_ID=agent_9701kb8ghmdhfvrajqf85ewpvn9p
+```
+
+---
 
 ## 🚀 Quick Start
 
-### Installation
+### Development Mode
 
-1. **Clone or initialize the project**:
-```bash
-cd walletProject2
-```
-
-2. **Install dependencies** (already done):
-```bash
-npm install
-```
-
-The following packages are installed:
-- `@tetherto/wdk` - Core WDK module manager
-- `@tetherto/wdk-wallet-evm` - Ethereum/EVM wallet support
-- `@tetherto/wdk-wallet-btc` - Bitcoin wallet support
-
-### Usage
-
-#### Option 1: Run Full Demo
+Start both backend and frontend servers simultaneously:
 
 ```bash
-npm start
+npm run dev
 ```
 
-This will:
-1. Generate a new seed phrase (⚠️ **SAVE IT SECURELY!**)
-2. Initialize wallets for Ethereum and Bitcoin
-3. Derive accounts at index 0
-4. Fetch balances
-5. Show transaction examples
-6. Save wallet data to `wallet-data.json`
-7. Display summary JSON
+This will start:
+- **Backend API**: http://localhost:3001
+- **Frontend PWA**: http://localhost:5173
 
-#### Option 2: Initialize Wallet Only
+### Individual Servers
 
 ```bash
-npm run init
+# Backend only
+npm run backend
+
+# Frontend only (in another terminal)
+npm run frontend
 ```
 
-**To restore from existing seed:**
+### First Time Setup
+
+1. Open http://localhost:5173 in your browser
+2. Click **"Create New Wallet"** or **"Import Existing Wallet"**
+3. Set up a 6-digit PIN
+4. **Save your seed phrase** (if creating new wallet)
+5. Confirm your seed phrase
+6. Start using your wallet!
+
+---
+
+## 📖 Usage
+
+### Creating a New Wallet
+
+1. Click **"Create New Wallet"** on the welcome screen
+2. Enter and confirm a 6-digit PIN
+3. **IMPORTANT**: Save your 12-word seed phrase securely
+4. Confirm your seed phrase by entering it
+5. You're ready to go!
+
+### Importing an Existing Wallet
+
+1. Click **"Import Existing Wallet"** on the welcome screen
+2. Enter your 12-word seed phrase
+3. Set up a 6-digit PIN
+4. Your wallet will be restored
+
+### Using the AI Assistant
+
+Click the chat icon in the bottom-right corner to open the AI assistant. Try these commands:
+
+- **"What's my balance?"** - Check your ETH balance
+- **"Send 0.01 ETH to 0x..."** - Prepare a transaction
+- **"Send 10 dollars to Ahmet"** - Send to a saved contact
+- **"Show my transaction history"** - View recent transactions
+- **"Swap 0.1 ETH for USDT"** - Prepare a token swap
+
+### Sending Transactions
+
+1. Navigate to **Send** from the dashboard
+2. Enter recipient address or select from contacts
+3. Enter amount
+4. Select token (ETH or ERC-20)
+5. Review and confirm
+6. Approve the transaction
+
+### Swapping Tokens
+
+1. Navigate to **Swap** from the dashboard
+2. Select tokens to swap
+3. Enter amount
+4. Review quote and slippage
+5. Confirm swap
+
+### Managing Contacts
+
+1. In the **Send** screen, enter an address
+2. Click **"Save as Contact"**
+3. Enter a name for the contact
+4. Use the contact name in future transactions or AI commands
+
+---
+
+## 🔒 Security
+
+### Encryption
+
+- **Seed Phrase**: Encrypted with AES-GCM 256-bit using WebCrypto API
+- **Key Derivation**: PBKDF2 with 100,000 iterations
+- **Storage**: IndexedDB with encrypted data only
+- **PIN**: Never stored, only used for key derivation
+
+### Best Practices
+
+1. **Never share your seed phrase** with anyone
+2. **Store your seed phrase** in a secure location (offline)
+3. **Use a strong PIN** (6 digits minimum)
+4. **Enable auto-lock** (default: 5 minutes)
+5. **Verify addresses** before sending transactions
+6. **Test with small amounts** first
+
+### What's Stored Where
+
+- ✅ **Encrypted seed phrase** → IndexedDB (local only)
+- ✅ **Contacts** → IndexedDB (local only)
+- ✅ **Settings** → IndexedDB (local only)
+- ❌ **Private keys** → Never stored (derived on-demand)
+- ❌ **Seed phrase (plaintext)** → Never stored
+- ❌ **PIN** → Never stored
+
+---
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+baifrostWallet/
+├── backend/
+│   ├── server.js              # Express API server
+│   ├── WalletFoundation.js    # WDK wrapper class
+│   ├── init-wallet.js         # CLI wallet initialization
+│   └── test-wallet.js         # Test suite
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/        # React components
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── SendScreen.tsx
+│   │   │   ├── SwapScreen.tsx
+│   │   │   ├── AgentChatWidget.tsx
+│   │   │   └── ...
+│   │   ├── contexts/          # React contexts
+│   │   │   ├── WdkContext.tsx
+│   │   │   ├── PinContext.tsx
+│   │   │   └── AgentContext.tsx
+│   │   ├── hooks/             # Custom React hooks
+│   │   │   ├── useSendTransaction.ts
+│   │   │   ├── useSwap.ts
+│   │   │   └── ...
+│   │   ├── services/          # API and service layers
+│   │   │   ├── api.ts
+│   │   │   └── contactService.ts
+│   │   └── utils/             # Utilities
+│   │       ├── secureStorage.ts
+│   │       └── validation.ts
+│   ├── vite.config.ts         # Vite configuration
+│   └── package.json
+│
+├── CONFIG.md                  # Network configuration guide
+├── package.json               # Root package
+└── README.md                  # This file
+```
+
+### Available Scripts
+
 ```bash
-npm run init -- your twelve word seed phrase goes here like this example
+# Development
+npm run dev          # Start both servers
+npm run backend      # Backend only
+npm run frontend     # Frontend only
+
+# Testing
+npm test             # Run test suite
+npm run init         # Initialize wallet (CLI)
+
+# Production
+cd frontend && npm run build    # Build frontend
+cd frontend && npm run preview  # Preview production build
 ```
 
-#### Option 3: Run Test Suite
+### Adding New Chains
 
+1. Install the WDK wallet module:
 ```bash
-npm test
+npm install @tetherto/wdk-wallet-{chain}
 ```
 
-This runs comprehensive tests including:
-- Seed phrase generation and validation
-- Wallet initialization
-- Account derivation
-- Address format validation
-- Balance fetching
-- Transaction preparation
-- Multiple account support
-
-## 📖 API Reference
-
-### WalletFoundation Class
-
-#### Constructor
-
+2. Register in `backend/WalletFoundation.js`:
 ```javascript
-import WalletFoundation from './WalletFoundation.js';
+import WalletManagerXxx from '@tetherto/wdk-wallet-xxx';
 
-const wallet = new WalletFoundation();
+this.wdk.registerWallet('xxx', WalletManagerXxx, {
+  // Configuration
+});
 ```
 
-#### Methods
+3. Add account derivation in `deriveAccounts()` method
 
-##### `initialize(seedPhrase?)`
+### Adding New Protocols
 
-Initialize the wallet with a seed phrase.
+1. Install the protocol module:
+```bash
+npm install @tetherto/wdk-protocol-{type}-{name}
+```
 
+2. Register in `WalletFoundation.js`:
 ```javascript
-// Generate new seed
-await wallet.initialize();
-
-// Or restore from existing
-await wallet.initialize('your twelve word seed phrase here');
+this.wdk.registerProtocol('ethereum', 'protocol-name', ProtocolClass, {
+  // Configuration
+});
 ```
 
-##### `deriveAccounts(accountIndex)`
-
-Derive accounts for all registered blockchains at the specified index.
-
-```javascript
-// Derive first account (index 0)
-await wallet.deriveAccounts(0);
-
-// Derive second account (index 1)
-await wallet.deriveAccounts(1);
-```
-
-##### `fetchBalances()`
-
-Fetch current balances for all accounts.
-
-```javascript
-await wallet.fetchBalances();
-```
-
-##### `prepareEthereumTransaction(toAddress, amount)`
-
-Prepare an Ethereum transaction (does not broadcast).
-
-```javascript
-const tx = await wallet.prepareEthereumTransaction(
-  '0xRecipientAddress',
-  '0.001' // ETH amount
-);
-
-// To broadcast:
-// const result = await wallet.accounts.ethereum.account.sendTransaction(tx);
-```
-
-##### `prepareBitcoinTransaction(toAddress, amount)`
-
-Prepare a Bitcoin transaction (does not broadcast).
-
-```javascript
-const tx = await wallet.prepareBitcoinTransaction(
-  'tb1qRecipientAddress',
-  '0.0001' // BTC amount
-);
-
-// To broadcast:
-// const result = await wallet.accounts.bitcoin.account.sendTransaction(tx);
-```
-
-##### `getSummary()`
-
-Get wallet summary in JSON format.
-
-```javascript
-const summary = wallet.getSummary();
-console.log(JSON.stringify(summary, null, 2));
-```
-
-Returns:
-```json
-{
-  "status": "foundation_ready",
-  "chains": ["ethereum", "bitcoin"],
-  "accounts": {
-    "ethereum": {
-      "address": "0x...",
-      "balance": "0"
-    },
-    "bitcoin": {
-      "address": "tb1...",
-      "balance": "0"
-    }
-  }
-}
-```
-
-##### `dispose()`
-
-Cleanup and dispose of WDK resources.
-
-```javascript
-wallet.dispose();
-```
-
-## 🔒 Security Best Practices
-
-### Critical Security Notes
-
-1. **Seed Phrase Storage**:
-   - ⚠️ **NEVER** commit your seed phrase to git
-   - ⚠️ **NEVER** share your seed phrase
-   - ⚠️ **NEVER** store it in plain text on your computer
-   - ✅ Write it down on paper and store securely
-   - ✅ Use a hardware wallet for production funds
-   - ✅ Use password managers with encryption
-
-2. **Testnet First**:
-   - Always test with testnets before mainnet
-   - This foundation uses Sepolia (ETH) and Bitcoin Testnet
-   - Get free testnet tokens from faucets
-
-3. **Code Review**:
-   - Review all transaction code before broadcasting
-   - Verify recipient addresses carefully
-   - Check amounts and fees
-
-4. **Network Configuration**:
-   - Verify RPC endpoints before use
-   - Use trusted node providers for mainnet
-   - Consider running your own nodes for production
+---
 
 ## 🌐 Network Configuration
 
-### Current Configuration
+### Current Networks
 
-**Ethereum (Sepolia Testnet)**:
-- RPC: `https://ethereum-sepolia-rpc.publicnode.com`
-- Chain ID: `11155111`
-- Derivation Path: `m/44'/60'/0'/0`
+- **Ethereum**: Sepolia Testnet (Chain ID: 11155111)
+- **Bitcoin**: Testnet
 
-**Bitcoin (Testnet)**:
-- Network: `testnet`
-- API: `https://blockstream.info/testnet/api`
-- Derivation Path: `m/84'/1'/0'/0` (BIP84 native segwit)
+See [CONFIG.md](./CONFIG.md) for detailed network configuration, RPC endpoints, and mainnet setup instructions.
 
-### Switching to Mainnet
+### Testnet Faucets
 
-⚠️ **Only do this after thorough testing!**
+- **Sepolia ETH**: https://sepoliafaucet.com/
+- **Bitcoin Testnet**: https://bitcoinfaucet.uo1.net/
 
-**For Ethereum Mainnet**, modify `WalletFoundation.js`:
+---
 
-```javascript
-this.wdk.registerWallet('ethereum', WalletManagerEvm, {
-  rpcUrl: 'https://ethereum-rpc.publicnode.com', // or your node
-  chainId: 1,
-  derivationPath: "m/44'/60'/0'/0"
-});
-```
-
-**For Bitcoin Mainnet**, modify `WalletFoundation.js`:
-
-```javascript
-this.wdk.registerWallet('bitcoin', WalletManagerBtc, {
-  network: 'mainnet',
-  rpcUrl: 'https://blockstream.info/api', // or your node
-  derivationPath: "m/84'/0'/0'/0"
-});
-```
-
-## 🔧 Testing
-
-### Get Testnet Tokens
-
-**Sepolia ETH Faucets**:
-- https://sepoliafaucet.com/
-- https://www.alchemy.com/faucets/ethereum-sepolia
-- https://faucet.quicknode.com/ethereum/sepolia
-
-**Bitcoin Testnet Faucets**:
-- https://bitcoinfaucet.uo1.net/
-- https://testnet-faucet.mempool.co/
-- https://coinfaucet.eu/en/btc-testnet/
+## 🧪 Testing
 
 ### Running Tests
 
 ```bash
-# Run full test suite
 npm test
-
-# Run main demo
-npm start
-
-# Initialize wallet only
-npm run init
 ```
 
-## 📦 Adding More Chains
+### Manual Testing Checklist
 
-The foundation is easily extensible. To add more chains:
+- [ ] Create new wallet
+- [ ] Import existing wallet
+- [ ] PIN setup and unlock
+- [ ] Send transaction
+- [ ] Swap tokens
+- [ ] View transaction history
+- [ ] Add and use contacts
+- [ ] AI assistant commands
+- [ ] Auto-lock functionality
 
-### Example: Adding TON
-
-1. **Install TON wallet module**:
-```bash
-npm install @tetherto/wdk-wallet-ton
-```
-
-2. **Register in WalletFoundation.js**:
-```javascript
-import WalletManagerTon from '@tetherto/wdk-wallet-ton';
-
-// In initialize() method:
-this.wdk.registerWallet('ton', WalletManagerTon, {
-  network: 'testnet',
-  endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC'
-});
-
-// In deriveAccounts() method:
-const tonAccount = await this.wdk.getAccount('ton', accountIndex);
-const tonAddress = await tonAccount.getAddress();
-this.accounts.ton = {
-  account: tonAccount,
-  address: tonAddress,
-  balance: '0'
-};
-```
-
-### Example: Adding Solana
-
-1. **Install Solana wallet module**:
-```bash
-npm install @tetherto/wdk-wallet-solana
-```
-
-2. **Register similarly** to TON example above
-
-## 🔌 Adding Protocols (Swap, Bridge, Lending)
-
-The WDK supports protocol modules for DeFi operations:
-
-### Example: Adding Paraswap (Token Swaps)
-
-```bash
-npm install @tetherto/wdk-protocol-swap-paraswap-evm
-```
-
-```javascript
-import ParaswapProtocolEvm from '@tetherto/wdk-protocol-swap-paraswap-evm';
-
-// Register protocol
-this.wdk.registerProtocol('ethereum', 'paraswap', ParaswapProtocolEvm, {
-  apiKey: 'your-api-key' // if required
-});
-
-// Use it
-const ethAccount = await this.wdk.getAccount('ethereum', 0);
-const paraswap = ethAccount.getSwapProtocol('paraswap');
-await paraswap.swap({
-  fromToken: '0x...',
-  toToken: '0x...',
-  amount: '1000000',
-  slippage: 0.5
-});
-```
-
-## 🎯 Next Steps / Roadmap
-
-### Phase 1: Foundation ✅ (Current)
-- [x] Multi-chain wallet initialization
-- [x] Account derivation
-- [x] Balance checking
-- [x] Transaction preparation
-- [x] Test suite
-
-### Phase 2: Enhanced Functionality (Next)
-- [ ] Add Solana support
-- [ ] Add TON support
-- [ ] Integrate swap protocols (Paraswap, etc.)
-- [ ] Integrate bridge protocols (USDT0)
-- [ ] Transaction history tracking
-- [ ] Gas estimation and optimization
-
-### Phase 3: UI Layer
-- [ ] Web interface (React/Vue/Svelte)
-- [ ] Mobile app (React Native)
-- [ ] QR code scanning
-- [ ] Address book
-- [ ] Transaction confirmation dialogs
-
-### Phase 4: AI & Automation
-- [ ] Natural language transaction commands
-- [ ] Automated portfolio rebalancing
-- [ ] Price alerts and notifications
-- [ ] Smart transaction scheduling
-- [ ] Multi-chain transaction batching
-
-### Phase 5: Advanced Features
-- [ ] Multi-signature wallets
-- [ ] Hardware wallet integration
-- [ ] NFT support
-- [ ] DeFi protocol integration (lending, staking)
-- [ ] Cross-chain swaps
+---
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
-**"Invalid seed phrase" error**:
-- Ensure seed phrase is exactly 12 words
-- Check for typos or extra spaces
-- Use WDK.isValidSeedPhrase() to validate
+**"Wallet not ready" error:**
+- Ensure backend server is running
+- Check browser console for errors
+- Verify IndexedDB is accessible
 
-**"Unable to fetch balance" warning**:
-- Check internet connection
-- Verify RPC endpoint is accessible
-- Try alternative RPC providers
+**"Transaction failed" error:**
+- Check network connection
+- Verify sufficient balance
+- Ensure RPC endpoint is accessible
 
-**"Failed to derive accounts" error**:
-- Ensure WDK packages are installed correctly
-- Check wallet configuration (RPC, chain ID)
-- Verify network connectivity
+**"AI assistant not responding":**
+- Verify ElevenLabs agent ID is configured
+- Check browser console for WebSocket errors
+- Ensure microphone permissions are granted
 
-**Import errors (ESM)**:
-- Ensure `"type": "module"` in package.json
-- Use `.js` extensions in imports
-- Use `import` not `require`
+**Balance not updating:**
+- Wait for auto-refresh (30 seconds)
+- Manually refresh from dashboard
+- Check RPC endpoint status
 
-## 📚 Resources
+### Reset Wallet (Development Only)
 
+To reset your wallet and start fresh:
+
+1. Open browser DevTools (F12)
+2. Go to **Application** → **IndexedDB**
+3. Delete **WalletDB** database
+4. Clear **Local Storage**
+5. Refresh the page
+
+---
+
+## 📚 Documentation
+
+- **[CONFIG.md](./CONFIG.md)**: Network configuration and RPC setup
+- **API Documentation**: See `backend/server.js` for available endpoints
 - **WDK Documentation**: https://docs.wallet.tether.io
-- **WDK Core GitHub**: https://github.com/tetherto/wdk-core
-- **Ethereum Documentation**: https://ethereum.org/developers
-- **Bitcoin Documentation**: https://bitcoin.org/en/developer-documentation
 
-## 📄 License
-
-MIT
+---
 
 ## 🤝 Contributing
 
-This is a foundation project. Contributions welcome! Areas for improvement:
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Areas for Contribution
+
 - Additional blockchain support
-- Protocol integrations
+- UI/UX improvements
 - Security enhancements
 - Documentation improvements
-- Test coverage
+- Bug fixes
+- Performance optimizations
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## ⚠️ Disclaimer
 
-This software is provided "as is" for educational and development purposes. Always:
-- Test thoroughly before using with real funds
+**This software is provided "as is" for educational and development purposes.**
+
+- Always test thoroughly before using with real funds
 - Use testnets for development
 - Follow security best practices
 - Keep your seed phrase secure
 - Understand the risks of self-custody
 
+**The developers are not responsible for any loss of funds.**
+
 ---
 
-**Status**: Foundation Ready ✅
+## 🙏 Acknowledgments
 
-**Supported Chains**: Ethereum (Sepolia), Bitcoin (Testnet)
+- [Tether WDK](https://github.com/tetherto/wdk-core) for the powerful wallet development kit
+- [ElevenLabs](https://elevenlabs.io/) for AI voice assistant technology
+- [React](https://react.dev/) and [Vite](https://vitejs.dev/) for the amazing developer experience
+- The open-source community for inspiration and support
 
-**Last Updated**: November 2025
+---
 
+<div align="center">
+
+**using React, TypeScript, and Tether WDK**
+
+[⭐ Star us on GitHub](https://github.com/0xumutkk/baifrostWallet) • [🐛 Report Bug](https://github.com/0xumutkk/baifrostWallet/issues) • [💡 Request Feature](https://github.com/0xumutkk/baifrostWallet/issues)
+
+</div>
