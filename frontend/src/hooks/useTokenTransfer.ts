@@ -56,13 +56,31 @@ export function useTokenTransfer() {
       amount: string;
       decimals?: number;
     }) => walletAPI.tokenTransfer(tokenAddress, toAddress, amount, decimals),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      console.log('✅ [useTokenTransfer] Token transfer successful, hash:', data.hash);
+      
       // Invalidate balance queries to refresh after transfer
       queryClient.invalidateQueries({ queryKey: ['balance'] });
       queryClient.invalidateQueries({
         queryKey: ['token', 'balance', data.tokenAddress],
       });
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      
+      // Wait a bit for transaction to appear on blockchain, then refetch with retries
+      const retryRefetch = async (attempts = 5, delay = 2000) => {
+        for (let i = 0; i < attempts; i++) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+          console.log(`🔄 [useTokenTransfer] Refetching transaction history (attempt ${i + 1}/${attempts})`);
+          try {
+            await queryClient.refetchQueries({ queryKey: ['transactions'] });
+            console.log('✅ [useTokenTransfer] Transaction history refetched');
+          } catch (error) {
+            console.warn(`⚠️ [useTokenTransfer] Refetch attempt ${i + 1} failed:`, error);
+          }
+        }
+      };
+      
+      retryRefetch().catch(err => console.error('Retry refetch error:', err));
     },
   });
 }

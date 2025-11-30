@@ -230,16 +230,42 @@ export const walletAPI = {
    * Get transaction history
    */
   getTransactions: async (chain: string, address: string): Promise<any> => {
-    const response = await fetch(`${API_BASE}/wallet/transactions/${chain}/${address}`, {
-      credentials: 'include',
-    });
+    console.log(`📜 [API] Fetching transactions for ${chain}:${address}`);
+    const url = `${API_BASE}/wallet/transactions/${chain}/${address}`;
+    console.log(`📜 [API] Request URL: ${url}`);
     
-    if (!response.ok) {
-      const error: ErrorResponse = await response.json();
-      throw new Error(error.error || 'Failed to get transactions');
+    try {
+      const response = await fetch(url, {
+        credentials: 'include',
+      });
+      
+      console.log(`📜 [API] Response status: ${response.status} ${response.statusText}`);
+      console.log(`📜 [API] Response headers:`, {
+        'content-type': response.headers.get('content-type'),
+      });
+      
+      if (!response.ok) {
+        const error: ErrorResponse = await response.json();
+        console.error(`❌ [API] Failed to get transactions:`, error);
+        throw new Error(error.error || 'Failed to get transactions');
+      }
+      
+      const data = await response.json();
+      console.log(`✅ [API] Full response:`, JSON.stringify(data, null, 2));
+      console.log(`✅ [API] Transactions summary:`, {
+        success: data.success,
+        count: data.transactions?.length || 0,
+        chain: data.chain,
+        address: data.address,
+        transactionsType: typeof data.transactions,
+        transactionsIsArray: Array.isArray(data.transactions)
+      });
+      
+      return data;
+    } catch (error) {
+      console.error(`❌ [API] Exception in getTransactions:`, error);
+      throw error;
     }
-    
-    return response.json();
   },
 
   /**

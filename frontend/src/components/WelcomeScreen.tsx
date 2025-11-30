@@ -34,7 +34,6 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             <span className="inline-block bg-gradient-to-r from-baifrost-orange via-[#FFA500] to-baifrost-teal bg-clip-text text-transparent">a</span>
             <span className="relative inline-block bg-gradient-to-r from-baifrost-teal to-[#60E8D8] bg-clip-text text-transparent">
               i
-              <span className="absolute -top-0.5 left-[3px] w-1.5 h-1.5 bg-baifrost-teal rounded-full"></span>
             </span>
             <span className="text-baifrost-beige">frost</span>
           </h1>

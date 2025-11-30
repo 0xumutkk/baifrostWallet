@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, ArrowUpRight, ArrowDownLeft, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { ExternalLink, ArrowUpRight, ArrowDownLeft, Clock, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { useTransactionHistory } from '../hooks/useTransactionHistory';
 import type { Transaction } from '../hooks/useTransactionHistory';
 import { useWdk } from '../contexts/WdkContext';
@@ -15,14 +15,23 @@ export const TransactionList: React.FC<TransactionListProps> = ({
   limit 
 }) => {
   const { address } = useWdk();
-  const { data, isLoading, error } = useTransactionHistory(chain, address || '', !!address);
+  const { data, isLoading, error, refetch, isRefetching } = useTransactionHistory(chain, address || '', !!address);
 
   // Debug logging
   React.useEffect(() => {
     console.log('📜 [TransactionList] Render - address:', address, 'chain:', chain, 'isLoading:', isLoading, 'error:', error);
     if (data) {
-      console.log('📜 [TransactionList] Data received:', data);
+      console.log('📜 [TransactionList] Full data object:', JSON.stringify(data, null, 2));
+      console.log('📜 [TransactionList] Data type:', typeof data);
+      console.log('📜 [TransactionList] Data.success:', data.success);
+      console.log('📜 [TransactionList] Data.transactions type:', typeof data.transactions);
+      console.log('📜 [TransactionList] Data.transactions is array:', Array.isArray(data.transactions));
       console.log('📜 [TransactionList] Transactions count:', data.transactions?.length || 0);
+      if (data.transactions && data.transactions.length > 0) {
+        console.log('📜 [TransactionList] First transaction:', data.transactions[0]);
+      }
+    } else {
+      console.log('📜 [TransactionList] No data received yet');
     }
   }, [address, chain, isLoading, error, data]);
 
@@ -70,6 +79,21 @@ export const TransactionList: React.FC<TransactionListProps> = ({
 
   return (
     <div className="space-y-2">
+      {/* Refresh button */}
+      <div className="flex items-center justify-end mb-2">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => refetch()}
+          disabled={isRefetching || isLoading}
+          className="p-1.5 hover:bg-gray-700/50 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-1.5"
+          title="Refresh transactions"
+        >
+          <RefreshCw className={`w-4 h-4 text-baifrost-teal ${isRefetching ? 'animate-spin' : ''}`} />
+          <span className="text-xs text-gray-400">{isRefetching ? 'Refreshing...' : 'Refresh'}</span>
+        </motion.button>
+      </div>
+
       {displayTransactions.length === 0 ? (
         <div className="text-center py-8 text-gray-400">
           <p>No transactions yet</p>

@@ -43,10 +43,30 @@ export function useSwapExecute() {
       amount: string;
       slippage?: number;
     }) => walletAPI.swapExecute(fromToken, toToken, amount, slippage),
-    onSuccess: () => {
+    onSuccess: async (data) => {
+      console.log('✅ [useSwap] Swap successful, hash:', data.hash);
+      
       // Invalidate balance queries to refresh after swap
       queryClient.invalidateQueries({ queryKey: ['balance'] });
       queryClient.invalidateQueries({ queryKey: ['swap', 'quote'] });
+      // Invalidate transaction history to show new swap transaction
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      
+      // Wait a bit for transaction to appear on blockchain, then refetch with retries
+      const retryRefetch = async (attempts = 5, delay = 2000) => {
+        for (let i = 0; i < attempts; i++) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+          console.log(`🔄 [useSwap] Refetching transaction history (attempt ${i + 1}/${attempts})`);
+          try {
+            await queryClient.refetchQueries({ queryKey: ['transactions'] });
+            console.log('✅ [useSwap] Transaction history refetched');
+          } catch (error) {
+            console.warn(`⚠️ [useSwap] Refetch attempt ${i + 1} failed:`, error);
+          }
+        }
+      };
+      
+      retryRefetch().catch(err => console.error('Retry refetch error:', err));
     },
   });
 }

@@ -129,9 +129,42 @@ function WalletOnboarding() {
   return null;
 }
 
+// Wrapper component that uses WdkContext - only rendered when inside WdkProvider
+function MainAppContent() {
+  const { isReady: wdkIsReady } = useWdk();
+  const [currentScreen, setCurrentScreen] = useState<Screen>('dashboard');
+
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        {currentScreen === 'dashboard' && (
+          <Dashboard 
+            key="dashboard" 
+            onNavigate={(screen) => setCurrentScreen(screen)} 
+          />
+        )}
+        {currentScreen === 'send' && (
+          <SendScreen key="send" onBack={() => setCurrentScreen('dashboard')} />
+        )}
+        {currentScreen === 'swap' && (
+          <SwapScreen key="swap" onBack={() => setCurrentScreen('dashboard')} />
+        )}
+        {currentScreen === 'receive' && (
+          <ReceiveScreen key="receive" onBack={() => setCurrentScreen('dashboard')} />
+        )}
+      </AnimatePresence>
+      
+          {/* AI Agent Chat Widget - always visible, can connect when wallet is ready */}
+          <AgentChatWidget />
+      
+      {/* Transaction Approval Modal - shows when there's a pending transaction */}
+      <TransactionApproval />
+    </>
+  );
+}
+
 function AppContent() {
   const { isPinSet, isUnlocked, needsMigration, migrateLegacyWallet, isLoading } = usePin();
-  const { isReady: wdkIsReady } = useWdk();
   const [currentScreen, setCurrentScreen] = useState<Screen>('dashboard');
 
   // Show loading while checking PIN status
@@ -165,33 +198,7 @@ function AppContent() {
       {isPinSet && !isUnlocked && <UnlockScreen />}
 
       {/* Show main app when unlocked - Dashboard will handle its own loading state */}
-      {isPinSet && isUnlocked && (
-        <>
-          <AnimatePresence mode="wait">
-            {currentScreen === 'dashboard' && (
-              <Dashboard 
-                key="dashboard" 
-                onNavigate={(screen) => setCurrentScreen(screen)} 
-              />
-            )}
-            {currentScreen === 'send' && (
-              <SendScreen key="send" onBack={() => setCurrentScreen('dashboard')} />
-            )}
-            {currentScreen === 'swap' && (
-              <SwapScreen key="swap" onBack={() => setCurrentScreen('dashboard')} />
-            )}
-            {currentScreen === 'receive' && (
-              <ReceiveScreen key="receive" onBack={() => setCurrentScreen('dashboard')} />
-            )}
-          </AnimatePresence>
-          
-          {/* AI Agent Chat Widget - only show when wallet is ready */}
-          {wdkIsReady && <AgentChatWidget />}
-          
-          {/* Transaction Approval Modal - shows when there's a pending transaction */}
-          <TransactionApproval />
-        </>
-      )}
+      {isPinSet && isUnlocked && <MainAppContent />}
     </>
   );
 }

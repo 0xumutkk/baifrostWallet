@@ -744,13 +744,37 @@ class WalletFoundation {
 
       const data = await response.json();
       console.log(`🔍 [getTransactionHistory] Etherscan API response status: ${data.status}`);
+      console.log(`🔍 [getTransactionHistory] Etherscan API message: ${data.message || 'N/A'}`);
+      console.log(`🔍 [getTransactionHistory] Etherscan API result type: ${typeof data.result}`);
+      console.log(`🔍 [getTransactionHistory] Etherscan API result is array: ${Array.isArray(data.result)}`);
+      if (Array.isArray(data.result)) {
+        console.log(`🔍 [getTransactionHistory] Etherscan API result length: ${data.result.length}`);
+        if (data.result.length > 0) {
+          console.log(`🔍 [getTransactionHistory] First transaction sample:`, {
+            hash: data.result[0].hash,
+            from: data.result[0].from,
+            to: data.result[0].to,
+            value: data.result[0].value,
+            timeStamp: data.result[0].timeStamp
+          });
+        }
+      }
 
-      if (data.status === '0' && data.message === 'NOTOK') {
+      if (data.status === '0') {
+        // Check if it's a "No transactions found" message (this is normal)
+        if (data.message === 'No transactions found' || data.message === 'OK') {
+          console.log(`ℹ️  [getTransactionHistory] No transactions found for address: ${address}`);
+          return [];
+        }
+        // Otherwise it's an error
+        console.error(`❌ [getTransactionHistory] Etherscan API error: ${data.message || 'Unknown error'}`);
         throw new Error(`Etherscan API error: ${data.message || 'Unknown error'}`);
       }
 
       if (data.status === '1' && data.result && Array.isArray(data.result)) {
-        return this.formatTransactions(data.result);
+        const formatted = this.formatTransactions(data.result);
+        console.log(`✅ [getTransactionHistory] Formatted ${formatted.length} transactions`);
+        return formatted;
       }
 
       // No transactions found

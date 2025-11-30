@@ -15,7 +15,8 @@ interface WdkContextType {
   refreshBalance: () => Promise<void>;
 }
 
-const WdkContext = createContext<WdkContextType | undefined>(undefined);
+// Create context with undefined as default, but we'll ensure it's always provided
+const WdkContext = createContext<WdkContextType | null>(null);
 
 export const WdkProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isReady, setIsReady] = useState(false);
@@ -296,9 +297,9 @@ export const WdkProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   );
 };
 
-export const useWdk = () => {
+export const useWdk = (): WdkContextType => {
   const context = useContext(WdkContext);
-  if (!context) {
+  if (context === null) {
     throw new Error('useWdk must be used within WdkProvider');
   }
   return context;
