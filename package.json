@@ -1,0 +1,36 @@
+{
+  "name": "wdk-wallet-foundation",
+  "version": "1.0.0",
+  "description": "Minimal self-custodial crypto wallet foundation using Tether WDK",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "backend": "node backend/server.js",
+    "frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "init": "node backend/init-wallet.js",
+    "test": "node backend/test-wallet.js"
+  },
+  "keywords": [
+    "wallet",
+    "crypto",
+    "wdk",
+    "tether",
+    "ethereum",
+    "bitcoin",
+    "self-custodial"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@tetherto/wdk": "^1.0.0-beta.4",
+    "@tetherto/wdk-protocol-swap-velora-evm": "^1.0.0-beta.4",
+    "@tetherto/wdk-wallet-btc": "^1.0.0-beta.3",
+    "@tetherto/wdk-wallet-evm": "^1.0.0-beta.4",
+    "cors": "^2.8.5",
+    "ethers": "^6.15.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2"
+  }
+}
