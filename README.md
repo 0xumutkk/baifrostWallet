@@ -153,7 +153,7 @@ BTC_NETWORK=testnet
 BTC_RPC_URL=https://blockstream.info/testnet/api
 
 # ElevenLabs AI Agent (required for AI features)
-ELEVENLABS_AGENT_ID=agent_9701kb8ghmdhfvrajqf85ewpvn9p
+ELEVENLABS_AGENT_ID=agent_3801kb9v9kkzfg5t4n7fw780qram
 ```
 
 ---
