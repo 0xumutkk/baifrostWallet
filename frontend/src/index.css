@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-900 text-gray-100 antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+  }
+  
+  * {
+    @apply border-gray-700;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105;
+    background: linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #40E0D0 100%);
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 bg-gray-800/80 backdrop-blur-xl rounded-xl font-semibold border transition-all;
+    color: #40E0D0;
+    border-color: rgba(64, 224, 208, 0.3);
+}
+  
+  .btn-secondary:hover {
+    border-color: rgba(64, 224, 208, 0.6);
+}
+
+  .card-cyber {
+    @apply bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 shadow-2xl;
+    border: 1px solid rgba(64, 224, 208, 0.2);
+  }
+  
+  .card-gradient {
+    @apply rounded-2xl p-6 shadow-2xl;
+    background: linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #40E0D0 100%);
+}
+  
+  .text-glow {
+    color: #40E0D0;
+    text-shadow: 0 0 10px currentColor;
+  }
+  
+  .text-glow-orange {
+    color: #FF8C00;
+    text-shadow: 0 0 10px currentColor;
+}
+
+  .gradient-text {
+    background: linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #40E0D0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .bg-gradient-baifrost {
+    background: linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #40E0D0 100%);
+  }
+}
