@@ -6,10 +6,14 @@
 ![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Tether WDK](https://img.shields.io/badge/Tether%20WDK-009393?style=for-the-badge&logo=tether&logoColor=white)
+![Hackathon](https://img.shields.io/badge/Future%20of%20Wallet%20by%20Tether-2nd%20Place-FFD700?style=for-the-badge)
 
 **A next-generation, self-custodial crypto wallet with AI-powered voice assistant**
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Security](#-security)
+🏆 **2nd place at the Future of Wallet hackathon by Tether** — selected as one of 10 finalist teams out of 100+ applications
+
+[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Security](#-security) • [Hackathon](#-hackathon)
 
 </div>
 
@@ -491,6 +495,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## 🏆 Hackathon
+
+Baifrost was designed and built for the **Future of Wallet** hackathon organized by **Tether**, the program around Tether's Wallet Development Kit (WDK).
+
+- 📥 **100+ teams applied**, 10 were selected to compete in the final stage
+- 🥈 **Baifrost finished 2nd** among the finalists
+
+What the judges saw:
+
+- A fully self-custodial, multi-chain PWA wallet built directly on top of Tether WDK
+- An AI voice assistant that turns natural language ("send 10 dollars to Ahmet") into reviewed, user-approved transactions
+- In-wallet DEX swaps via the Velora protocol
+- Client-side security: AES-GCM encrypted seed storage in IndexedDB, PBKDF2 key derivation, PIN lock — no keys or seed phrase ever leave the device
+
+---
+
 ## 🙏 Acknowledgments
 
 - [Tether WDK](https://github.com/tetherto/wdk-core) for the powerful wallet development kit
@@ -502,7 +522,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**using React, TypeScript, and Tether WDK**
+**Built with React, TypeScript, and Tether WDK**
+
+**🥈 2nd place — Future of Wallet by Tether**
 
 [⭐ Star us on GitHub](https://github.com/0xumutkk/baifrostWallet) • [🐛 Report Bug](https://github.com/0xumutkk/baifrostWallet/issues) • [💡 Request Feature](https://github.com/0xumutkk/baifrostWallet/issues)
 
